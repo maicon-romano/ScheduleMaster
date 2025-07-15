@@ -1,0 +1,84 @@
+[
+  {
+    "name": "João Miranda",
+    "workDays": [
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday"
+    ],
+    "shiftStart": "08:00",
+    "shiftEnd": "12:00",
+    "weekendRotation": false,
+    "active": true,
+    "id": 1
+  },
+  {
+    "name": "Ana Silva",
+    "workDays": [
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday"
+    ],
+    "shiftStart": "12:00",
+    "shiftEnd": "18:00",
+    "weekendRotation": false,
+    "active": true,
+    "id": 2
+  },
+  {
+    "name": "Marcos Costa",
+    "workDays": [
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday"
+    ],
+    "shiftStart": "08:00",
+    "shiftEnd": "12:00",
+    "weekendRotation": false,
+    "active": true,
+    "id": 3
+  },
+  {
+    "name": "Lucas Ferreira",
+    "workDays": [
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday"
+    ],
+    "shiftStart": "12:00",
+    "shiftEnd": "18:00",
+    "weekendRotation": false,
+    "active": true,
+    "id": 4
+  },
+  {
+    "name": "Kellen Silva",
+    "workDays": [
+      "saturday",
+      "sunday"
+    ],
+    "shiftStart": "08:00",
+    "shiftEnd": "18:00",
+    "weekendRotation": true,
+    "active": true,
+    "id": 5
+  },
+  {
+    "name": "Maicon Rocha",
+    "workDays": [
+      "saturday",
+      "sunday"
+    ],
+    "shiftStart": "08:00",
+    "shiftEnd": "18:00",
+    "weekendRotation": true,
+    "active": true,
+    "id": 6
+  }
+]

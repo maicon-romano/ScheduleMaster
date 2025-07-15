@@ -1,0 +1,51 @@
+[
+  {
+    "date": "01-01",
+    "name": "Confraternização Universal",
+    "type": "national",
+    "active": true,
+    "id": 1
+  },
+  {
+    "date": "24-06",
+    "name": "São João",
+    "type": "recife",
+    "active": true,
+    "id": 2
+  },
+  {
+    "date": "07-09",
+    "name": "Independência do Brasil",
+    "type": "national",
+    "active": true,
+    "id": 3
+  },
+  {
+    "date": "12-10",
+    "name": "Nossa Senhora Aparecida",
+    "type": "national",
+    "active": true,
+    "id": 4
+  },
+  {
+    "date": "02-11",
+    "name": "Finados",
+    "type": "national",
+    "active": true,
+    "id": 5
+  },
+  {
+    "date": "15-11",
+    "name": "Proclamação da República",
+    "type": "national",
+    "active": true,
+    "id": 6
+  },
+  {
+    "date": "25-12",
+    "name": "Natal",
+    "type": "national",
+    "active": true,
+    "id": 7
+  }
+]
