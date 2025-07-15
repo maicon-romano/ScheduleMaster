@@ -109,10 +109,11 @@ export default function EmployeeModal({ isOpen, onClose, employee }: EmployeeMod
       });
       onClose();
     },
-    onError: () => {
+    onError: (error) => {
+      console.error('Error creating employee:', error);
       toast({
         title: "Erro!",
-        description: "Erro ao criar funcionário.",
+        description: `Erro ao criar funcionário: ${error.message || 'Erro desconhecido'}`,
         variant: "destructive",
       });
     },
@@ -131,20 +132,45 @@ export default function EmployeeModal({ isOpen, onClose, employee }: EmployeeMod
       });
       onClose();
     },
-    onError: () => {
+    onError: (error) => {
+      console.error('Error updating employee:', error);
       toast({
         title: "Erro!",
-        description: "Erro ao atualizar funcionário.",
+        description: `Erro ao atualizar funcionário: ${error.message || 'Erro desconhecido'}`,
         variant: "destructive",
       });
     },
   });
 
   const onSubmit = (data: EmployeeFormData) => {
+    // Clean the data before sending
+    const cleanData = {
+      ...data,
+      // Remove useCustomSchedule field that's not in the backend schema
+      useCustomSchedule: undefined,
+      // Only include customSchedule if it's being used and has data
+      customSchedule: data.useCustomSchedule && data.customSchedule 
+        ? Object.fromEntries(
+            Object.entries(data.customSchedule).filter(([_, value]) => 
+              value && value.start && value.end
+            )
+          )
+        : undefined
+    };
+
+    // Remove undefined fields
+    Object.keys(cleanData).forEach(key => {
+      if (cleanData[key] === undefined) {
+        delete cleanData[key];
+      }
+    });
+
+    console.log('Sending employee data:', cleanData);
+
     if (employee) {
-      updateEmployeeMutation.mutate(data);
+      updateEmployeeMutation.mutate(cleanData);
     } else {
-      createEmployeeMutation.mutate(data);
+      createEmployeeMutation.mutate(cleanData);
     }
   };
 

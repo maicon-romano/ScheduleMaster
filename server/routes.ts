@@ -29,24 +29,32 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post("/api/employees", async (req, res) => {
     try {
+      console.log('Creating employee with data:', req.body);
       const validatedData = insertEmployeeSchema.parse(req.body);
       const employee = await storage.createEmployee(validatedData);
       res.status(201).json(employee);
-    } catch (error) {
-      res.status(400).json({ message: "Invalid employee data" });
+    } catch (error: any) {
+      console.error('Error creating employee:', error);
+      if (error.name === 'ZodError') {
+        res.status(400).json({ message: "Invalid employee data", errors: error.errors });
+      } else {
+        res.status(500).json({ message: "Error creating employee", error: error.message });
+      }
     }
   });
 
   app.put("/api/employees/:id", async (req, res) => {
     try {
       const id = parseInt(req.params.id);
+      console.log('Updating employee', id, 'with data:', req.body);
       const employee = await storage.updateEmployee(id, req.body);
       if (!employee) {
         return res.status(404).json({ message: "Employee not found" });
       }
       res.json(employee);
-    } catch (error) {
-      res.status(500).json({ message: "Error updating employee" });
+    } catch (error: any) {
+      console.error('Error updating employee:', error);
+      res.status(500).json({ message: "Error updating employee", error: error.message });
     }
   });
 
