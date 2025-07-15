@@ -3,9 +3,10 @@ import { useQuery, useMutation } from "@tanstack/react-query";
 import { queryClient } from "@/lib/queryClient";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { CalendarCheck, Plus, Save, Edit } from "lucide-react";
+import { CalendarCheck, Calendar, Grid3X3, LayoutGrid, Plus, Save, Edit } from "lucide-react";
 import Sidebar from "@/components/Sidebar";
-import ScheduleTable from "@/components/ScheduleTable";
+import CalendarView from "@/components/CalendarView";
+import DayEditModal from "@/components/DayEditModal";
 import EmployeeModal from "@/components/EmployeeModal";
 import { getCurrentMonthStart, formatMonthYear, getFutureHolidays } from "@/lib/dateUtils";
 import { apiRequest } from "@/lib/queryClient";
@@ -14,7 +15,9 @@ export default function SchedulePage() {
   const { toast } = useToast();
   const [currentMonthStart] = useState(getCurrentMonthStart());
   const [isEmployeeModalOpen, setIsEmployeeModalOpen] = useState(false);
-  const [isEditMode, setIsEditMode] = useState(false);
+  const [isDayEditModalOpen, setIsDayEditModalOpen] = useState(false);
+  const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  const [viewMode, setViewMode] = useState<'day' | 'week' | 'month'>('month');
 
   const { data: employees = [], isLoading: employeesLoading } = useQuery({
     queryKey: ["/api/employees"],
@@ -59,6 +62,16 @@ export default function SchedulePage() {
     }
   };
 
+  const handleDayClick = (date: string) => {
+    setSelectedDate(date);
+    setIsDayEditModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsDayEditModalOpen(false);
+    setSelectedDate(null);
+  };
+
   const weekendEmployees = employees.filter((emp: any) => emp.weekendRotation);
   const nextSaturday = rotationState?.lastSaturdayEmployeeId === weekendEmployees[0]?.id ? 
     weekendEmployees[1]?.name : weekendEmployees[0]?.name;
@@ -70,7 +83,7 @@ export default function SchedulePage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-blue-600 text-white shadow-lg">
+      <header className="bg-primary text-primary-foreground shadow-lg">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <h1 className="text-2xl font-bold flex items-center">
@@ -81,6 +94,33 @@ export default function SchedulePage() {
               <span className="text-sm">
                 {formatMonthYear()}
               </span>
+              {/* View Mode Toggle */}
+              <div className="flex bg-white/20 rounded-lg p-1">
+                <Button
+                  variant={viewMode === 'day' ? 'default' : 'ghost'}
+                  size="sm"
+                  onClick={() => setViewMode('day')}
+                  className={viewMode === 'day' ? 'bg-white text-primary' : 'text-white hover:bg-white/20'}
+                >
+                  <Calendar className="h-4 w-4" />
+                </Button>
+                <Button
+                  variant={viewMode === 'week' ? 'default' : 'ghost'}
+                  size="sm"
+                  onClick={() => setViewMode('week')}
+                  className={viewMode === 'week' ? 'bg-white text-primary' : 'text-white hover:bg-white/20'}
+                >
+                  <Grid3X3 className="h-4 w-4" />
+                </Button>
+                <Button
+                  variant={viewMode === 'month' ? 'default' : 'ghost'}
+                  size="sm"
+                  onClick={() => setViewMode('month')}
+                  className={viewMode === 'month' ? 'bg-white text-primary' : 'text-white hover:bg-white/20'}
+                >
+                  <LayoutGrid className="h-4 w-4" />
+                </Button>
+              </div>
             </div>
           </div>
         </div>
@@ -98,39 +138,36 @@ export default function SchedulePage() {
 
           {/* Main Content */}
           <main className="lg:col-span-3">
-            {/* Weekly Schedule */}
+            {/* Calendar Schedule */}
             <div className="bg-white rounded-lg shadow-md overflow-hidden">
               <div className="p-6 border-b border-gray-200">
                 <div className="flex justify-between items-center">
-                  <h2 className="text-xl font-semibold text-gray-800">Escala Semanal</h2>
+                  <h2 className="text-xl font-semibold text-gray-800">
+                    Escala {viewMode === 'month' ? 'Mensal' : viewMode === 'week' ? 'Semanal' : 'Diária'}
+                  </h2>
                   <div className="flex space-x-2">
                     <Button
                       onClick={handleSaveSchedule}
-                      className="bg-green-600 hover:bg-green-700"
+                      className="bg-primary hover:bg-primary/90"
                       disabled={saveScheduleMutation.isPending}
                     >
                       <Save className="mr-2 h-4 w-4" />
                       Salvar Escala
                     </Button>
-                    <Button
-                      onClick={() => setIsEditMode(!isEditMode)}
-                      variant="outline"
-                      className="border-gray-500 text-gray-600 hover:bg-gray-50"
-                    >
-                      <Edit className="mr-2 h-4 w-4" />
-                      Editar
-                    </Button>
                   </div>
                 </div>
               </div>
 
-              <ScheduleTable
-                schedule={currentSchedule}
-                employees={employees}
-                holidays={holidays}
-                isLoading={scheduleLoading || employeesLoading}
-                isEditMode={isEditMode}
-              />
+              <div className="p-6">
+                <CalendarView
+                  schedule={currentSchedule}
+                  employees={employees}
+                  holidays={holidays}
+                  isLoading={scheduleLoading || employeesLoading}
+                  viewMode={viewMode}
+                  onDayClick={handleDayClick}
+                />
+              </div>
             </div>
 
             {/* Action Cards */}
@@ -178,13 +215,14 @@ export default function SchedulePage() {
                 <div className="space-y-3">
                   <Button
                     onClick={() => setIsEmployeeModalOpen(true)}
-                    className="w-full bg-blue-600 hover:bg-blue-700"
+                    className="w-full bg-primary hover:bg-primary/90"
                   >
                     <Plus className="mr-2 h-4 w-4" />
                     Novo Funcionário
                   </Button>
                   <Button
-                    className="w-full bg-orange-500 hover:bg-orange-600"
+                    className="w-full border border-primary text-primary hover:bg-primary hover:text-primary-foreground"
+                    variant="outline"
                   >
                     <Plus className="mr-2 h-4 w-4" />
                     Novo Feriado
@@ -192,7 +230,7 @@ export default function SchedulePage() {
                   <Button
                     className="w-full bg-green-600 hover:bg-green-700"
                   >
-                    <i className="fas fa-download mr-2"></i>
+                    <Save className="mr-2 h-4 w-4" />
                     Exportar Escala
                   </Button>
                 </div>
@@ -205,6 +243,15 @@ export default function SchedulePage() {
       <EmployeeModal
         isOpen={isEmployeeModalOpen}
         onClose={() => setIsEmployeeModalOpen(false)}
+      />
+
+      <DayEditModal
+        isOpen={isDayEditModalOpen}
+        onClose={handleCloseModal}
+        date={selectedDate}
+        schedule={currentSchedule}
+        employees={employees}
+        holidays={holidays}
       />
     </div>
   );

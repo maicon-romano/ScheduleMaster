@@ -304,6 +304,7 @@ async function generateMonthlySchedule(monthStart: string, employees: any[], hol
       id: Date.now() + day,
       date: dateStr,
       dayOfWeek,
+      assignments: [],
       morningEmployeeId: morningEmployee?.id || null,
       afternoonEmployeeId: afternoonEmployee?.id || null,
       oncallEmployeeId: oncallEmployee?.id || null,
@@ -411,6 +412,7 @@ async function generateWeeklySchedule(weekStart: string, employees: any[], holid
       id: Date.now() + i, // Generate unique ID
       date: dateStr,
       dayOfWeek,
+      assignments: [],
       morningEmployeeId: morningEmployee?.id || null,
       afternoonEmployeeId: afternoonEmployee?.id || null,
       oncallEmployeeId: oncallEmployee?.id || null,

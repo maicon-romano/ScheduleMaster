@@ -1,0 +1,101 @@
+> O sistema já foi desenvolvido. Agora ele precisa ser **ajustado e melhorado** com base nas especificações abaixo.
+> O sistema atual já inclui:
+>
+> * Cadastro de funcionários e seus turnos fixos
+> * Revezamento automático de fim de semana
+> * Armazenamento local em JSON
+> * Interface web básica com visualização semanal
+> * Card de feriados
+>
+> **Faça os seguintes ajustes no sistema existente:**
+
+---
+
+## 📆 1. Escala Mensal Contínua (sem geração manual)
+
+* A escala deve sempre exibir o **mês inteiro atual**, com base na **data do sistema**.
+* **Remover** qualquer lógica de "gerar nova escala semanal".
+* A escala deve ser **única, contínua e editável diretamente**.
+* Ao mudar o mês, o sistema carrega automaticamente a nova escala.
+
+---
+
+## 🗓️ 2. Visualização tipo agenda (não apenas tabela)
+
+* Adicionar visualizações:
+
+  * **Por dia**
+  * **Por semana**
+  * **Por mês**
+* Utilizar layout estilo **agenda/calendário**, mais claro e amigável que tabelas simples.
+* O usuário deve poder alternar entre essas visualizações.
+
+---
+
+## 📋 3. Card “Próximos Feriados” — corrigir lógica
+
+* Os feriados estão armazenados como `"MM-DD"` (sem ano).
+* O sistema deve:
+
+  * Converter `"MM-DD"` para o **ano atual**
+  * Comparar com a data de hoje
+  * Exibir **somente feriados futuros**
+* Exemplo: se hoje é 15/07, exibir 16/07, mas **não** mostrar 24/06.
+
+---
+
+## ⏱️ 4. Carga horária semanal de 44 horas
+
+* Definir horários padrão de 44h semanais por funcionário:
+
+  * **4 dias**: 08h às 18h
+  * **1 dia**: 08h às 17h
+* Cada funcionário deve seguir essa lógica ou permitir customização se necessário.
+
+---
+
+## ✏️ 5. Edição direta da escala por dia
+
+* O usuário deve poder clicar em um dia no calendário e:
+
+  * Ver todos os funcionários escalados para aquele dia
+  * Editar quem está de plantão e seu horário
+* A escala é baseada **por dia**, e não por turnos fixos.
+* Funcionários podem ter horários diferentes em cada dia.
+
+---
+
+## 🎨 6. Estilo e Experiência do Usuário
+
+* Adotar a **paleta de cores #e8781a** como base visual (botões, destaques, feriados, etc.)
+* Tornar o sistema **totalmente responsivo para dispositivos móveis**
+* Melhorar a **usabilidade e fluidez da interface**, com foco em:
+
+  * Layout adaptável
+  * Botões visíveis e acessíveis
+  * Boa experiência ao editar escala em telas pequenas
+
+---
+
+## ✅ O que deve continuar funcionando
+
+* Revezamento automático entre dois funcionários nos fins de semana
+* Armazenamento local em JSON:
+
+  * `funcionarios.json`
+  * `feriados.json`
+  * `escala.json`
+* Interface leve e funcional, sem banco de dados externo
+
+---
+
+## 🧪 Exemplo esperado:
+
+* Acesse o sistema em 15/07:
+
+  * Escala do mês de julho é carregada automaticamente
+  * Card “Próximos Feriados” mostra apenas feriados futuros
+  * Ao clicar no dia 20/07, é possível editar quem trabalha e seu horário
+  * Interface se adapta bem no celular
+  * Cor principal é #e8781a (destaques, feriados, seleção)
+

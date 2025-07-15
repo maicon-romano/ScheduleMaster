@@ -8,7 +8,12 @@ export const employeeSchema = z.object({
   shiftStart: z.string(), // HH:MM format
   shiftEnd: z.string(), // HH:MM format
   weekendRotation: z.boolean(),
-  active: z.boolean().default(true)
+  active: z.boolean().default(true),
+  weeklyHours: z.number().default(44).optional(), // Standard 44-hour workweek
+  customSchedule: z.record(z.string(), z.object({
+    start: z.string(),
+    end: z.string(),
+  })).optional(), // Custom schedule per day: { 'monday': { start: '08:00', end: '18:00' } }
 });
 
 export const insertEmployeeSchema = employeeSchema.omit({ id: true });
@@ -33,12 +38,30 @@ export const scheduleEntrySchema = z.object({
   id: z.number(),
   date: z.string(), // YYYY-MM-DD format
   dayOfWeek: z.enum(['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']),
+  assignments: z.array(z.object({
+    employeeId: z.number(),
+    startTime: z.string(), // HH:MM format
+    endTime: z.string(), // HH:MM format
+    type: z.enum(['regular', 'oncall', 'holiday']).default('regular')
+  })).optional(),
+  // Legacy fields for backward compatibility
   morningEmployeeId: z.number().nullable(),
   afternoonEmployeeId: z.number().nullable(),
   oncallEmployeeId: z.number().nullable(),
   isHoliday: z.boolean().default(false),
   holidayName: z.string().nullable(),
   status: z.enum(['normal', 'holiday', 'oncall']).default('normal')
+});
+
+// Day edit schema for the modal
+export const dayEditSchema = z.object({
+  date: z.string(),
+  assignments: z.array(z.object({
+    employeeId: z.number(),
+    startTime: z.string(),
+    endTime: z.string(),
+    type: z.enum(['regular', 'oncall', 'holiday']).default('regular')
+  }))
 });
 
 export const insertScheduleEntrySchema = scheduleEntrySchema.omit({ id: true });

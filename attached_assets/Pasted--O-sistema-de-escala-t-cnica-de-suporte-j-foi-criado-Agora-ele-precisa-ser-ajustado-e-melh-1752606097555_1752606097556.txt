@@ -1,0 +1,90 @@
+> O sistema de escala técnica de suporte **já foi criado**. Agora, ele precisa ser **ajustado e melhorado** com base nos seguintes requisitos e correções.
+> O sistema já conta com:
+>
+> * Cadastro de funcionários com dias e horários fixos
+> * Revezamento de fim de semana entre dois funcionários
+> * Armazenamento em arquivos JSON
+> * Interface web com visualização por semana
+> * Card de feriados
+>
+> Abaixo estão os **ajustes obrigatórios** que devem ser aplicados:
+
+---
+
+## 🔁 1. **Escala contínua do mês atual (sem geração manual)**
+
+* A escala deve sempre carregar automaticamente o **mês atual completo**, com base na data atual do sistema.
+* **Não deve existir botão de "gerar nova semana" ou "gerar nova escala".**
+* Toda escala é única, contínua, e **editável diretamente**.
+* Quando o mês vira, o sistema carrega a escala do novo mês automaticamente.
+
+---
+
+## 📆 2. **Visualização por agenda (não apenas por tabela)**
+
+* Adicionar modos de visualização:
+
+  * **Por dia**
+  * **Por semana**
+  * **Por mês**
+* Preferência por layout estilo **agenda/calendário**, mais claro que uma tabela.
+* O usuário deve conseguir alternar entre essas visualizações facilmente.
+
+---
+
+## 📋 3. **Card “Próximos Feriados” — corrigir lógica**
+
+* Os feriados são armazenados como `"MM-DD"` (sem ano).
+* Ao exibir os próximos feriados:
+
+  * Converter as datas para o **ano atual**
+  * Comparar com a **data atual do sistema**
+  * Exibir apenas os **feriados futuros** (não deve exibir datas que já passaram, mesmo que sejam no mesmo mês)
+* Exemplo:
+
+  * Se hoje é 15/07, deve mostrar 16/07 (Nossa Senhora do Carmo)
+  * **Não deve mostrar** 24/06 (São João), pois já passou
+
+---
+
+## ⏱️ 4. **Carga horária de 44 horas semanais**
+
+* Cada funcionário deve trabalhar 44h semanais, distribuídas como:
+
+  * **4 dias**: 08h às 18h
+  * **1 dia**: 08h às 17h
+* O sistema deve definir isso por padrão, ou permitir configurar esses blocos por funcionário
+
+---
+
+## ✏️ 5. **Editar escala por dia**
+
+* O usuário deve poder:
+
+  * Clicar em qualquer **dia do mês**
+  * Ver todos os **funcionários escalados naquele dia**
+  * **Alterar a pessoa** e o horário para aquele dia
+* A escala é baseada em **dias**, e **não deve usar turnos fixos**
+* Funcionários podem ter horários diferentes em dias diferentes
+
+---
+
+## ✅ Manter o que já funciona:
+
+* Revezamento automático de fim de semana entre dois funcionários
+* Feriados nacionais e de Recife (armazenados em `"MM-DD"`)
+* Armazenamento em JSON (`funcionarios.json`, `feriados.json`, `escala.json`)
+* Interface web leve e funcional
+
+---
+
+## 🎯 Exemplo de funcionamento esperado:
+
+* Acesse o sistema em 15/07 → escala de **julho inteiro** é exibida
+* Card de feriados mostra apenas os que ainda virão no ano
+* Clique em 20/07 → veja quem está escalado e edite diretamente se necessário
+* Visualização em agenda permite ver por semana, dia ou mês
+
+---
+
+> A ideia é tornar o sistema uma solução leve, clara e funcional para controle de escala mensal, sem recriação de semanas, com interface amigável e edição direta.

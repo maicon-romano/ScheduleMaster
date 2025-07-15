@@ -80,5 +80,20 @@
     "weekendRotation": true,
     "active": true,
     "id": 6
+  },
+  {
+    "name": "Maicon Romano",
+    "workDays": [
+      "monday",
+      "wednesday",
+      "thursday",
+      "tuesday",
+      "sunday"
+    ],
+    "shiftStart": "08:00",
+    "shiftEnd": "18:00",
+    "weekendRotation": true,
+    "active": true,
+    "id": 7
   }
 ]
