@@ -141,10 +141,18 @@
         "dayOfWeek": "sunday",
         "morningEmployeeId": null,
         "afternoonEmployeeId": null,
-        "oncallEmployeeId": 6,
+        "oncallEmployeeId": 4,
         "isHoliday": false,
         "holidayName": null,
-        "status": "oncall"
+        "status": "oncall",
+        "assignments": [
+          {
+            "employeeId": 4,
+            "startTime": "08:00",
+            "endTime": "17:00",
+            "type": "oncall"
+          }
+        ]
       },
       {
         "id": 1752605254167,

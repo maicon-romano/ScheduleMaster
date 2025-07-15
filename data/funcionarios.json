@@ -5,13 +5,36 @@
       "monday",
       "tuesday",
       "wednesday",
-      "thursday"
+      "thursday",
+      "friday"
     ],
     "shiftStart": "12:00",
     "shiftEnd": "20:00",
     "weekendRotation": false,
     "active": true,
-    "id": 1
+    "id": 1,
+    "customSchedule": {
+      "monday": {
+        "start": "12:00",
+        "end": "22:00"
+      },
+      "tuesday": {
+        "start": "12:00",
+        "end": "22:00"
+      },
+      "wednesday": {
+        "start": "12:00",
+        "end": "22:00"
+      },
+      "thursday": {
+        "start": "12:00",
+        "end": "22:00"
+      },
+      "friday": {
+        "start": "13:00",
+        "end": "22:00"
+      }
+    }
   },
   {
     "name": "Matheus Germano",
@@ -26,35 +49,103 @@
     "shiftEnd": "18:00",
     "weekendRotation": false,
     "active": true,
-    "id": 2
+    "id": 2,
+    "customSchedule": {
+      "friday": {
+        "start": "08:00",
+        "end": "17:00"
+      },
+      "thursday": {
+        "start": "08:00",
+        "end": "18:00"
+      },
+      "wednesday": {
+        "start": "08:00",
+        "end": "18:00"
+      },
+      "tuesday": {
+        "start": "08:00",
+        "end": "18:00"
+      },
+      "monday": {
+        "start": "08:00",
+        "end": "18:00"
+      }
+    }
   },
   {
-    "name": "Marcos Costa",
+    "name": "Alisson Rodrigo",
     "workDays": [
       "tuesday",
       "wednesday",
       "thursday",
-      "friday"
+      "friday",
+      "monday"
     ],
     "shiftStart": "08:00",
     "shiftEnd": "12:00",
     "weekendRotation": false,
     "active": true,
-    "id": 3
+    "id": 3,
+    "customSchedule": {
+      "monday": {
+        "start": "08:00",
+        "end": "18:00"
+      },
+      "tuesday": {
+        "start": "08:00",
+        "end": "18:00"
+      },
+      "wednesday": {
+        "start": "08:00",
+        "end": "18:00"
+      },
+      "thursday": {
+        "start": "08:00",
+        "end": "18:00"
+      },
+      "friday": {
+        "start": "08:00",
+        "end": "17:00"
+      }
+    }
   },
   {
-    "name": "Lucas Ferreira",
+    "name": "Kellen Cristina",
     "workDays": [
       "tuesday",
       "wednesday",
       "thursday",
-      "friday"
+      "friday",
+      "saturday"
     ],
     "shiftStart": "12:00",
     "shiftEnd": "18:00",
-    "weekendRotation": false,
+    "weekendRotation": true,
     "active": true,
-    "id": 4
+    "id": 4,
+    "customSchedule": {
+      "saturday": {
+        "start": "08:00",
+        "end": "17:00"
+      },
+      "tuesday": {
+        "start": "09:00",
+        "end": "19:00"
+      },
+      "wednesday": {
+        "start": "09:00",
+        "end": "19:00"
+      },
+      "thursday": {
+        "start": "09:00",
+        "end": "19:00"
+      },
+      "friday": {
+        "start": "09:00",
+        "end": "19:00"
+      }
+    }
   },
   {
     "name": "Kellen Silva",
@@ -65,7 +156,7 @@
     "shiftStart": "08:00",
     "shiftEnd": "18:00",
     "weekendRotation": true,
-    "active": true,
+    "active": false,
     "id": 5
   },
   {
@@ -77,7 +168,7 @@
     "shiftStart": "08:00",
     "shiftEnd": "18:00",
     "weekendRotation": true,
-    "active": true,
+    "active": false,
     "id": 6
   },
   {
@@ -93,6 +184,28 @@
     "shiftEnd": "18:00",
     "weekendRotation": true,
     "active": true,
-    "id": 7
+    "id": 7,
+    "customSchedule": {
+      "sunday": {
+        "start": "08:00",
+        "end": "17:00"
+      },
+      "monday": {
+        "start": "08:00",
+        "end": "18:00"
+      },
+      "tuesday": {
+        "start": "08:00",
+        "end": "18:00"
+      },
+      "wednesday": {
+        "start": "08:00",
+        "end": "18:00"
+      },
+      "thursday": {
+        "start": "08:00",
+        "end": "18:00"
+      }
+    }
   }
 ]

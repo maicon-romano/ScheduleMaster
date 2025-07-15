@@ -326,7 +326,20 @@ export default function EmployeeModal({ isOpen, onClose, employee }: EmployeeMod
                                       type="time" 
                                       placeholder="Início"
                                       {...field}
-                                      value={field.value || "08:00"}
+                                      onChange={(e) => {
+                                        field.onChange(e.target.value);
+                                        // Update the form's customSchedule object
+                                        const currentSchedule = form.getValues('customSchedule') || {};
+                                        const daySchedule = currentSchedule[day.id] || {};
+                                        form.setValue('customSchedule', {
+                                          ...currentSchedule,
+                                          [day.id]: {
+                                            ...daySchedule,
+                                            start: e.target.value
+                                          }
+                                        });
+                                      }}
+                                      value={field.value || form.getValues('shiftStart') || "08:00"}
                                     />
                                   </FormControl>
                                 </FormItem>
@@ -343,7 +356,20 @@ export default function EmployeeModal({ isOpen, onClose, employee }: EmployeeMod
                                       type="time" 
                                       placeholder="Fim"
                                       {...field}
-                                      value={field.value || "18:00"}
+                                      onChange={(e) => {
+                                        field.onChange(e.target.value);
+                                        // Update the form's customSchedule object
+                                        const currentSchedule = form.getValues('customSchedule') || {};
+                                        const daySchedule = currentSchedule[day.id] || {};
+                                        form.setValue('customSchedule', {
+                                          ...currentSchedule,
+                                          [day.id]: {
+                                            ...daySchedule,
+                                            end: e.target.value
+                                          }
+                                        });
+                                      }}
+                                      value={field.value || form.getValues('shiftEnd') || "18:00"}
                                     />
                                   </FormControl>
                                 </FormItem>

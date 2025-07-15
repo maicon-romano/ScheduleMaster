@@ -58,39 +58,55 @@ export default function CalendarView({
   const getDayShifts = (entry: any) => {
     const shifts = [];
     
-    // Morning shift
-    if (entry.morningEmployeeId) {
-      const emp = getEmployeeById(entry.morningEmployeeId);
-      if (emp) {
-        shifts.push({
-          employee: emp,
-          time: '08:00-12:00',
-          type: 'morning'
-        });
+    // Use new assignments format if available
+    if (entry.assignments && entry.assignments.length > 0) {
+      entry.assignments.forEach((assignment: any) => {
+        const emp = getEmployeeById(assignment.employeeId);
+        if (emp) {
+          const timeDisplay = assignment.type === 'oncall' 
+            ? 'Plantão' 
+            : `${assignment.startTime}-${assignment.endTime}`;
+          
+          shifts.push({
+            employee: emp,
+            time: timeDisplay,
+            type: assignment.type
+          });
+        }
+      });
+    } else {
+      // Fallback to legacy format
+      if (entry.morningEmployeeId) {
+        const emp = getEmployeeById(entry.morningEmployeeId);
+        if (emp) {
+          shifts.push({
+            employee: emp,
+            time: '08:00-12:00',
+            type: 'morning'
+          });
+        }
       }
-    }
 
-    // Afternoon shift
-    if (entry.afternoonEmployeeId) {
-      const emp = getEmployeeById(entry.afternoonEmployeeId);
-      if (emp) {
-        shifts.push({
-          employee: emp,
-          time: '12:00-18:00',
-          type: 'afternoon'
-        });
+      if (entry.afternoonEmployeeId) {
+        const emp = getEmployeeById(entry.afternoonEmployeeId);
+        if (emp) {
+          shifts.push({
+            employee: emp,
+            time: '12:00-18:00',
+            type: 'afternoon'
+          });
+        }
       }
-    }
 
-    // Oncall shift
-    if (entry.oncallEmployeeId) {
-      const emp = getEmployeeById(entry.oncallEmployeeId);
-      if (emp) {
-        shifts.push({
-          employee: emp,
-          time: 'Plantão',
-          type: 'oncall'
-        });
+      if (entry.oncallEmployeeId) {
+        const emp = getEmployeeById(entry.oncallEmployeeId);
+        if (emp) {
+          shifts.push({
+            employee: emp,
+            time: 'Plantão',
+            type: 'oncall'
+          });
+        }
       }
     }
 

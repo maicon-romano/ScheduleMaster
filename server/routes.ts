@@ -283,28 +283,68 @@ async function generateMonthlySchedule(monthStart: string, employees: any[], hol
     const holiday = holidays.find(h => h.date === monthDay);
     const isHoliday = !!holiday;
     
-    // Find employees for this day
-    const morningEmployee = employees.find(emp => 
-      emp.workDays.includes(dayOfWeek) && 
-      emp.shiftStart === "08:00" && 
-      emp.shiftEnd === "12:00"
+    // Find ALL employees working this day
+    const workingEmployees = employees.filter(emp => 
+      emp.active && emp.workDays.includes(dayOfWeek)
     );
     
-    const afternoonEmployee = employees.find(emp => 
-      emp.workDays.includes(dayOfWeek) && 
-      emp.shiftStart === "12:00" && 
-      emp.shiftEnd === "18:00"
-    );
+    // Create assignments for all working employees
+    const assignments = workingEmployees.map(emp => {
+      let startTime = emp.shiftStart;
+      let endTime = emp.shiftEnd;
+      
+      // Check for custom schedule for this day
+      if (emp.customSchedule && emp.customSchedule[dayOfWeek]) {
+        startTime = emp.customSchedule[dayOfWeek].start;
+        endTime = emp.customSchedule[dayOfWeek].end;
+      }
+      
+      return {
+        employeeId: emp.id,
+        startTime,
+        endTime,
+        type: 'regular' as 'regular'
+      };
+    });
     
-    // Weekend rotation logic
-    let oncallEmployee = null;
-    if (dayOfWeek === 'saturday' && weekendEmployees.length >= 2) {
-      oncallEmployee = weekendEmployees[currentSaturdayEmployeeIndex];
+    // Weekend rotation logic for oncall assignments
+    let oncallEmployee: any = null;
+    if (dayOfWeek === 'saturday' && weekendEmployees.length > 0) {
+      oncallEmployee = weekendEmployees[currentSaturdayEmployeeIndex % weekendEmployees.length];
+      // Add oncall assignment if not already working
+      if (!workingEmployees.some(emp => emp.id === oncallEmployee.id)) {
+        assignments.push({
+          employeeId: oncallEmployee.id,
+          startTime: "08:00",
+          endTime: "17:00",
+          type: 'oncall' as 'oncall'
+        });
+      }
       currentSaturdayEmployeeIndex = (currentSaturdayEmployeeIndex + 1) % weekendEmployees.length;
-    } else if (dayOfWeek === 'sunday' && weekendEmployees.length >= 2) {
-      oncallEmployee = weekendEmployees[currentSundayEmployeeIndex];
+    } else if (dayOfWeek === 'sunday' && weekendEmployees.length > 0) {
+      oncallEmployee = weekendEmployees[currentSundayEmployeeIndex % weekendEmployees.length];
+      // Add oncall assignment if not already working
+      if (!workingEmployees.some(emp => emp.id === oncallEmployee.id)) {
+        assignments.push({
+          employeeId: oncallEmployee.id,
+          startTime: "08:00",
+          endTime: "17:00",
+          type: 'oncall' as 'oncall'
+        });
+      }
       currentSundayEmployeeIndex = (currentSundayEmployeeIndex + 1) % weekendEmployees.length;
     }
+    
+    // Legacy compatibility - find first employees for morning/afternoon
+    const morningEmployee = workingEmployees.find(emp => {
+      const startTime = emp.customSchedule?.[dayOfWeek]?.start || emp.shiftStart;
+      return startTime <= "12:00";
+    });
+    
+    const afternoonEmployee = workingEmployees.find(emp => {
+      const startTime = emp.customSchedule?.[dayOfWeek]?.start || emp.shiftStart;
+      return startTime >= "12:00";
+    });
     
     const status: 'holiday' | 'oncall' | 'normal' = isHoliday ? 'holiday' : (oncallEmployee ? 'oncall' : 'normal');
     
@@ -312,7 +352,7 @@ async function generateMonthlySchedule(monthStart: string, employees: any[], hol
       id: Date.now() + day,
       date: dateStr,
       dayOfWeek,
-      assignments: [],
+      assignments: assignments,
       morningEmployeeId: morningEmployee?.id || null,
       afternoonEmployeeId: afternoonEmployee?.id || null,
       oncallEmployeeId: oncallEmployee?.id || null,
