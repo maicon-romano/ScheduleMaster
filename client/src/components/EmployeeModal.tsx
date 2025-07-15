@@ -23,6 +23,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Clock, User } from "lucide-react";
 
 const employeeFormSchema = z.object({
   name: z.string().min(1, "Nome é obrigatório"),
@@ -31,6 +33,11 @@ const employeeFormSchema = z.object({
   shiftEnd: z.string().min(1, "Hora de fim é obrigatória"),
   weekendRotation: z.boolean(),
   active: z.boolean().default(true),
+  useCustomSchedule: z.boolean().default(false),
+  customSchedule: z.record(z.string(), z.object({
+    start: z.string(),
+    end: z.string(),
+  })).optional(),
 });
 
 type EmployeeFormData = z.infer<typeof employeeFormSchema>;
@@ -43,6 +50,7 @@ interface EmployeeModalProps {
 
 export default function EmployeeModal({ isOpen, onClose, employee }: EmployeeModalProps) {
   const { toast } = useToast();
+  const [useCustomSchedule, setUseCustomSchedule] = useState(false);
 
   const form = useForm<EmployeeFormData>({
     resolver: zodResolver(employeeFormSchema),
@@ -53,12 +61,16 @@ export default function EmployeeModal({ isOpen, onClose, employee }: EmployeeMod
       shiftEnd: "18:00",
       weekendRotation: false,
       active: true,
+      useCustomSchedule: false,
+      customSchedule: {},
     },
   });
 
   // Reset form when employee changes
   useEffect(() => {
     if (employee) {
+      const hasCustomSchedule = employee.customSchedule && Object.keys(employee.customSchedule).length > 0;
+      setUseCustomSchedule(hasCustomSchedule);
       form.reset({
         name: employee.name,
         workDays: employee.workDays,
@@ -66,8 +78,11 @@ export default function EmployeeModal({ isOpen, onClose, employee }: EmployeeMod
         shiftEnd: employee.shiftEnd,
         weekendRotation: employee.weekendRotation,
         active: employee.active,
+        useCustomSchedule: hasCustomSchedule,
+        customSchedule: employee.customSchedule || {},
       });
     } else {
+      setUseCustomSchedule(false);
       form.reset({
         name: "",
         workDays: [],
@@ -75,6 +90,8 @@ export default function EmployeeModal({ isOpen, onClose, employee }: EmployeeMod
         shiftEnd: "18:00",
         weekendRotation: false,
         active: true,
+        useCustomSchedule: false,
+        customSchedule: {},
       });
     }
   }, [employee, form]);
@@ -143,7 +160,7 @@ export default function EmployeeModal({ isOpen, onClose, employee }: EmployeeMod
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-md">
+      <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>
             {employee ? 'Editar Funcionário' : 'Novo Funcionário'}
@@ -201,34 +218,118 @@ export default function EmployeeModal({ isOpen, onClose, employee }: EmployeeMod
               )}
             />
 
-            <div className="grid grid-cols-2 gap-4">
+            {/* Schedule Type Selection */}
+            <div className="space-y-4">
               <FormField
                 control={form.control}
-                name="shiftStart"
+                name="useCustomSchedule"
                 render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Hora Início</FormLabel>
+                  <FormItem className="flex flex-row items-start space-x-3 space-y-0">
                     <FormControl>
-                      <Input type="time" {...field} />
+                      <Checkbox
+                        checked={useCustomSchedule}
+                        onCheckedChange={(checked) => {
+                          setUseCustomSchedule(!!checked);
+                          field.onChange(checked);
+                        }}
+                      />
                     </FormControl>
-                    <FormMessage />
+                    <div className="space-y-1 leading-none">
+                      <FormLabel>
+                        Usar horários diferentes por dia da semana
+                      </FormLabel>
+                    </div>
                   </FormItem>
                 )}
               />
+              
+              {!useCustomSchedule ? (
+                <div className="grid grid-cols-2 gap-4">
+                  <FormField
+                    control={form.control}
+                    name="shiftStart"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Hora Início</FormLabel>
+                        <FormControl>
+                          <Input type="time" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
 
-              <FormField
-                control={form.control}
-                name="shiftEnd"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Hora Fim</FormLabel>
-                    <FormControl>
-                      <Input type="time" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                  <FormField
+                    control={form.control}
+                    name="shiftEnd"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Hora Fim</FormLabel>
+                        <FormControl>
+                          <Input type="time" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  <FormLabel className="text-sm font-medium">Horários por Dia da Semana</FormLabel>
+                  <div className="grid gap-3">
+                    {workDaysOptions.map((day) => {
+                      const selectedWorkDays = form.watch("workDays") || [];
+                      const isWorkDay = selectedWorkDays.includes(day.id);
+                      
+                      if (!isWorkDay) return null;
+                      
+                      return (
+                        <div key={day.id} className="flex items-center gap-3 p-3 border rounded-lg">
+                          <div className="flex items-center gap-2 min-w-[80px]">
+                            <Clock className="h-4 w-4 text-gray-500" />
+                            <span className="text-sm font-medium">{day.label}</span>
+                          </div>
+                          <div className="flex gap-2 flex-1">
+                            <FormField
+                              control={form.control}
+                              name={`customSchedule.${day.id}.start`}
+                              render={({ field }) => (
+                                <FormItem className="flex-1">
+                                  <FormControl>
+                                    <Input 
+                                      type="time" 
+                                      placeholder="Início"
+                                      {...field}
+                                      value={field.value || "08:00"}
+                                    />
+                                  </FormControl>
+                                </FormItem>
+                              )}
+                            />
+                            <span className="text-gray-500 self-center">até</span>
+                            <FormField
+                              control={form.control}
+                              name={`customSchedule.${day.id}.end`}
+                              render={({ field }) => (
+                                <FormItem className="flex-1">
+                                  <FormControl>
+                                    <Input 
+                                      type="time" 
+                                      placeholder="Fim"
+                                      {...field}
+                                      value={field.value || "18:00"}
+                                    />
+                                  </FormControl>
+                                </FormItem>
+                              )}
+                            />
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
             </div>
 
             <FormField
@@ -258,7 +359,7 @@ export default function EmployeeModal({ isOpen, onClose, employee }: EmployeeMod
               <Button 
                 type="submit" 
                 disabled={createEmployeeMutation.isPending || updateEmployeeMutation.isPending}
-                className="bg-blue-600 hover:bg-blue-700"
+                className="bg-primary hover:bg-primary/90"
               >
                 {employee ? 'Atualizar' : 'Salvar'} Funcionário
               </Button>

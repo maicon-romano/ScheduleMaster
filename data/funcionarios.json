@@ -1,6 +1,20 @@
 [
   {
-    "name": "João Miranda",
+    "name": "Igor Castro",
+    "workDays": [
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday"
+    ],
+    "shiftStart": "12:00",
+    "shiftEnd": "20:00",
+    "weekendRotation": false,
+    "active": true,
+    "id": 1
+  },
+  {
+    "name": "Matheus Germano",
     "workDays": [
       "monday",
       "tuesday",
@@ -9,21 +23,6 @@
       "friday"
     ],
     "shiftStart": "08:00",
-    "shiftEnd": "12:00",
-    "weekendRotation": false,
-    "active": true,
-    "id": 1
-  },
-  {
-    "name": "Ana Silva",
-    "workDays": [
-      "monday",
-      "tuesday",
-      "wednesday",
-      "thursday",
-      "friday"
-    ],
-    "shiftStart": "12:00",
     "shiftEnd": "18:00",
     "weekendRotation": false,
     "active": true,
