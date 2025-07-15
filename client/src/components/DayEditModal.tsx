@@ -118,12 +118,7 @@ export default function DayEditModal({
         oncallEmployeeId: data.assignments.find(a => a.type === "oncall")?.employeeId || null,
       };
 
-      const response = await apiRequest("PUT", `/api/monthly-schedules/${schedule.id}`, {
-        ...schedule,
-        entries: schedule.entries.map((entry: any) => 
-          entry.id === dayEntry.id ? updatedEntry : entry
-        )
-      });
+      const response = await apiRequest("PUT", `/api/monthly-schedules/${schedule.id}/entries/${dayEntry.id}`, updatedEntry);
       return response.json();
     },
     onSuccess: () => {

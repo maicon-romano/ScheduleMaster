@@ -228,6 +228,36 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Update individual schedule entry
+  app.put("/api/monthly-schedules/:id/entries/:entryId", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const entryId = parseInt(req.params.entryId);
+      
+      const schedule = await storage.getMonthlySchedule(id);
+      if (!schedule) {
+        return res.status(404).json({ message: "Schedule not found" });
+      }
+      
+      const entryIndex = schedule.entries.findIndex(e => e.id === entryId);
+      if (entryIndex === -1) {
+        return res.status(404).json({ message: "Entry not found" });
+      }
+      
+      // Update the specific entry
+      schedule.entries[entryIndex] = {
+        ...schedule.entries[entryIndex],
+        ...req.body
+      };
+      
+      const updatedSchedule = await storage.updateMonthlySchedule(id, schedule);
+      res.json(updatedSchedule);
+    } catch (error) {
+      console.error("Error updating schedule entry:", error);
+      res.status(500).json({ message: "Error updating schedule entry" });
+    }
+  });
+
   // Weekend rotation state
   app.get("/api/rotation-state", async (req, res) => {
     try {
@@ -289,7 +319,12 @@ async function generateMonthlySchedule(monthStart: string, employees: any[], hol
     );
     
     // Create assignments for all working employees
-    const assignments = workingEmployees.map(emp => {
+    const assignments: Array<{
+      employeeId: number;
+      startTime: string;
+      endTime: string;
+      type: 'regular' | 'oncall' | 'holiday';
+    }> = workingEmployees.map(emp => {
       let startTime = emp.shiftStart;
       let endTime = emp.shiftEnd;
       
@@ -303,7 +338,7 @@ async function generateMonthlySchedule(monthStart: string, employees: any[], hol
         employeeId: emp.id,
         startTime,
         endTime,
-        type: 'regular' as 'regular'
+        type: 'regular' as const
       };
     });
     
@@ -317,7 +352,7 @@ async function generateMonthlySchedule(monthStart: string, employees: any[], hol
           employeeId: oncallEmployee.id,
           startTime: "08:00",
           endTime: "17:00",
-          type: 'oncall' as 'oncall'
+          type: 'oncall' as const
         });
       }
       currentSaturdayEmployeeIndex = (currentSaturdayEmployeeIndex + 1) % weekendEmployees.length;
@@ -329,7 +364,7 @@ async function generateMonthlySchedule(monthStart: string, employees: any[], hol
           employeeId: oncallEmployee.id,
           startTime: "08:00",
           endTime: "17:00",
-          type: 'oncall' as 'oncall'
+          type: 'oncall' as const
         });
       }
       currentSundayEmployeeIndex = (currentSundayEmployeeIndex + 1) % weekendEmployees.length;

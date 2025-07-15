@@ -1,0 +1,76 @@
+> O sistema de escala já está criado, mas a **tela de escala mensal** e a **carga dinâmica de dados** precisam de correções.
+> A seguir estão os problemas identificados e o que precisa ser corrigido urgentemente:
+
+---
+
+## 🐞 Problemas Atuais na Tela de Escala
+
+### 1. ❌ Informações do JSON não são carregadas corretamente
+
+* Quando o usuário altera o funcionário ou o horário de um dia, essas alterações:
+
+  * **Não estão sendo salvas corretamente no arquivo `escala.json`**
+  * **Não reaparecem** ao recarregar a página ou mudar de visualização
+* A tela deve **carregar dinamicamente** os dados do `escala.json`, e refletir as mudanças imediatamente
+
+**✔ Correção esperada:**
+
+* As edições feitas (ex: troca de funcionário, horário) devem:
+
+  * Atualizar o `escala.json`
+  * Ser recarregadas corretamente ao retornar à tela
+
+---
+
+### 2. ❌ Funcionários aparecem em dias errados ou incompletos
+
+* Mesmo que 4 ou 5 funcionários estejam escalados para um dia de semana (segunda a sexta), **apenas 2 estão aparecendo**
+* Isso indica que a lógica que preenche a escala está incompleta ou com erro no filtro de dias
+
+**✔ Correção esperada:**
+
+* O sistema deve verificar **para cada funcionário** se ele está escalado naquele dia (com base no cadastro em `funcionarios.json`)
+* Deve preencher corretamente **todos os funcionários daquele dia**
+
+---
+
+### 3. ❌ Revezamento de Sábado e Domingo não funciona corretamente
+
+* Os funcionários com `revezamento: true` (ex: Maicon e Kellen) **não estão sendo escalados corretamente nos fins de semana**
+* Em alguns casos, os dias aparecem **vazios**, mesmo com lógica de revezamento configurada
+
+**✔ Correção esperada:**
+
+* Implementar ou corrigir a lógica de revezamento:
+
+  * Exemplo: em semanas pares, Kellen no sábado e Maicon no domingo; em semanas ímpares, inverte
+* O sistema deve escalar automaticamente os dois nos sábados e domingos conforme a alternância
+
+---
+
+### 4. ❌ Feriados não aparecem corretamente na tela
+
+* Os feriados são armazenados como `"MM-DD"` no `feriados.json`
+* Eles devem ser convertidos para o **ano atual** e comparados com cada dia do mês atual
+* Feriados como **24/06 (São João)** ou **16/07 (Nossa Senhora do Carmo)** devem ser destacados
+
+**✔ Correção esperada:**
+
+* Para cada dia do mês exibido:
+
+  * Verificar se `"MM-DD"` daquele dia está na lista de feriados
+  * Se sim, **destacar na visualização** (ex: fundo colorido, ícone, ou rótulo “Feriado”)
+
+---
+
+## 🛠️ Resumo das Correções a Fazer
+
+1. Corrigir a **gravação e leitura do arquivo `escala.json`** após edição
+2. Ajustar a lógica para que **todos os funcionários previstos para um dia** apareçam corretamente
+3. Garantir que o **revezamento de fins de semana funcione automaticamente**
+4. Corrigir o carregamento e **exibição correta de feriados**
+5. Testar a tela com diferentes datas para garantir que tudo esteja dinâmico e preciso
+
+---
+
+> O objetivo é que a tela de escala mensal reflita com precisão todos os dados dos arquivos JSON, seja totalmente editável, e destaque os feriados e revezamentos conforme a lógica planejada.
