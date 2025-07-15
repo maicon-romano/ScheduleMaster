@@ -1,0 +1,77 @@
+> Crie um sistema leve, simples e funcional para gerenciar a **escala semanal de suporte técnico**, com as seguintes características:
+>
+> ---
+>
+> ## 🔧 Funcionalidades principais:
+>
+> 1. **Cadastro de Funcionários**
+>
+>    * Cada funcionário deve ter:
+>
+>      * Nome
+>      * Dias fixos de trabalho (ex: segunda a sexta)
+>      * Horário do turno (ex: 08:00 - 18:00)
+>      * Indicador se participa ou não do revezamento de fim de semana
+> 2. **Gerador de Escala Semanal**
+>
+>    * Gera uma escala de 7 dias (segunda a domingo)
+>    * Inclui automaticamente os funcionários nos dias e horários cadastrados
+>    * Realiza o revezamento entre dois funcionários no fim de semana (um sábado sim, um não; um domingo sim, um não)
+>    * Deve permitir alteração manual de escalas após geração
+> 3. **Suporte a Feriados**
+>
+>    * Os feriados devem ser verificados **sem ano** (ex: "01-01", "24-06")
+>    * A lista de feriados inclui:
+>
+>      * Feriados **nacionais**
+>      * Feriados da **cidade de Recife**
+>    * Em dias de feriado, o sistema deve:
+>
+>      * Omitir a escala, ou
+>      * Destacar visualmente o feriado, ou
+>      * Permitir escolher entre operar ou não nesse dia
+> 4. **Armazenamento simples em JSON**
+>
+>    * Todas as informações devem ser lidas e salvas em arquivos `.json`, como:
+>
+>      * `funcionarios.json` → dados de funcionários
+>      * `feriados.json` → lista de feriados
+>      * `escala.json` → escalas geradas semanalmente
+>    * Não deve usar banco de dados externo (como Firebase ou Supabase)
+> 5. **Interface (se houver)**
+>
+>    * Pode ser web (simples com HTML/JS) ou desktop (Tkinter, CLI ou similar)
+>    * Exibir a escala semanal em formato de tabela
+>    * Permitir gerar nova escala para a próxima semana com um botão
+>    * Opção de editar a escala manualmente após gerar
+>
+> ---
+>
+> ## 📁 Estrutura esperada de arquivos:
+>
+> * `funcionarios.json` (lista de funcionários com turnos e revezamento)
+> * `feriados.json` (lista de feriados nacionais e locais no formato "MM-DD")
+> * `escala.json` (escala gerada com datas e nomes)
+>
+> ---
+>
+> ## ✅ Requisitos gerais:
+>
+> * Sistema leve, portátil, sem dependência de servidores externos
+> * Capacidade de rodar localmente
+> * Fácil de manter e expandir
+> * Código organizado e bem comentado
+> * Interface clara, se houver (não obrigatória)
+>
+> ---
+>
+> Exemplo de revezamento esperado:
+>
+> * Funcionários Kellen e Maicon revezam os plantões de sábado e domingo
+> * Ex: Semana 1 → Kellen (sábado), Maicon (domingo)
+> * Semana 2 → Maicon (sábado), Kellen (domingo)
+>
+> ---
+>
+> Crie a estrutura completa, pronta para rodar ou adaptar conforme necessário.
+
