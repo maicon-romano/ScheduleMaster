@@ -113,7 +113,7 @@ export default function CalendarView({
           ${isToday ? 'ring-2 ring-primary' : ''}
           ${entryIsHoliday ? 'bg-primary/10 border-primary/20' : ''}
           ${isWeekend && !entryIsHoliday ? 'bg-gray-50' : ''}
-          ${isCompact ? 'min-h-[120px]' : 'min-h-[160px]'}
+          ${isCompact ? 'min-h-[140px]' : 'min-h-[200px]'}
         `}
         onClick={() => onDayClick(entry.date)}
       >
@@ -139,15 +139,40 @@ export default function CalendarView({
             <div 
               key={idx}
               className={`
-                flex items-center gap-1 text-xs p-1 rounded
-                ${shift.type === 'oncall' ? 'bg-orange-100 text-orange-800' : 'bg-blue-100 text-blue-800'}
-                ${isCompact ? 'text-[10px]' : ''}
+                flex flex-col gap-1 text-xs p-2 rounded mb-1
+                ${shift.type === 'oncall' ? 'bg-primary/10 border border-primary/20' : 'bg-blue-50 border border-blue-200'}
+                ${isCompact ? 'text-[10px] p-1' : ''}
               `}
             >
-              <User className="h-3 w-3" />
-              <span className="font-medium">{getEmployeeInitials(shift.employee)}</span>
-              <Clock className="h-2 w-2 ml-auto" />
-              <span>{shift.time}</span>
+              {isCompact ? (
+                // Compact view for month view
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-1">
+                    <User className="h-2 w-2" />
+                    <span className="font-medium text-[10px] truncate">
+                      {shift.employee.name.split(' ')[0]}
+                    </span>
+                  </div>
+                  <span className="text-[9px] text-gray-600">{shift.time}</span>
+                </div>
+              ) : (
+                // Full view for week/day view
+                <>
+                  <div className="flex items-center gap-1">
+                    <User className="h-3 w-3" />
+                    <span className="font-medium truncate flex-1">{shift.employee.name}</span>
+                    {shift.type === 'oncall' && (
+                      <span className="bg-primary text-primary-foreground px-1 rounded text-[10px]">
+                        Plantão
+                      </span>
+                    )}
+                  </div>
+                  <div className="flex items-center gap-1 text-gray-600">
+                    <Clock className="h-2 w-2" />
+                    <span className="text-xs">{shift.time}</span>
+                  </div>
+                </>
+              )}
             </div>
           ))}
           {shifts.length === 0 && !entryIsHoliday && (
@@ -249,7 +274,7 @@ export default function CalendarView({
           <div>Sex</div>
           <div>Sáb</div>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-7 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-7 gap-2 md:gap-4">
           {weekDays}
         </div>
       </div>
@@ -278,6 +303,42 @@ export default function CalendarView({
     return (
       <div className="max-w-2xl mx-auto">
         {renderDayCard(entry)}
+        
+        {/* Extended information for day view */}
+        <div className="mt-6 space-y-4">
+          <h3 className="text-lg font-semibold">Detalhes da Escalação</h3>
+          {getDayShifts(entry).map((shift, idx) => (
+            <div key={idx} className="bg-white border rounded-lg p-4 shadow-sm">
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-semibold">
+                    {getEmployeeInitials(shift.employee)}
+                  </div>
+                  <div>
+                    <h4 className="font-medium">{shift.employee.name}</h4>
+                    <p className="text-sm text-gray-600">
+                      {shift.type === 'oncall' ? 'Plantão' : 
+                       shift.type === 'morning' ? 'Turno Manhã' : 'Turno Tarde'}
+                    </p>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <div className="font-medium">{shift.time}</div>
+                  <div className="text-sm text-gray-600">
+                    {shift.type === 'oncall' ? 'Fim de semana' : 'Segunda a Sexta'}
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+          
+          {getDayShifts(entry).length === 0 && (
+            <div className="text-center py-8 text-gray-500">
+              <Calendar className="h-12 w-12 mx-auto mb-4 text-gray-300" />
+              <p>Nenhuma escalação para este dia</p>
+            </div>
+          )}
+        </div>
       </div>
     );
   };
