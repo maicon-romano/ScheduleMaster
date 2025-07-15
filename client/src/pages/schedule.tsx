@@ -7,12 +7,12 @@ import { CalendarCheck, Plus, Save, Edit } from "lucide-react";
 import Sidebar from "@/components/Sidebar";
 import ScheduleTable from "@/components/ScheduleTable";
 import EmployeeModal from "@/components/EmployeeModal";
-import { getCurrentWeekStart, formatDateRange } from "@/lib/dateUtils";
+import { getCurrentMonthStart, formatMonthYear, getFutureHolidays } from "@/lib/dateUtils";
 import { apiRequest } from "@/lib/queryClient";
 
 export default function SchedulePage() {
   const { toast } = useToast();
-  const [currentWeekStart, setCurrentWeekStart] = useState(getCurrentWeekStart());
+  const [currentMonthStart] = useState(getCurrentMonthStart());
   const [isEmployeeModalOpen, setIsEmployeeModalOpen] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
 
@@ -21,7 +21,7 @@ export default function SchedulePage() {
   });
 
   const { data: currentSchedule, isLoading: scheduleLoading } = useQuery({
-    queryKey: ["/api/schedules/week", currentWeekStart],
+    queryKey: ["/api/monthly-schedules/month", currentMonthStart],
   });
 
   const { data: holidays = [] } = useQuery({
@@ -32,34 +32,13 @@ export default function SchedulePage() {
     queryKey: ["/api/rotation-state"],
   });
 
-  const generateScheduleMutation = useMutation({
-    mutationFn: async (weekStart: string) => {
-      const response = await apiRequest("POST", "/api/schedules/generate", { weekStart });
-      return response.json();
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/schedules"] });
-      toast({
-        title: "Sucesso!",
-        description: "Nova escala gerada com sucesso.",
-      });
-    },
-    onError: () => {
-      toast({
-        title: "Erro!",
-        description: "Erro ao gerar nova escala.",
-        variant: "destructive",
-      });
-    },
-  });
-
   const saveScheduleMutation = useMutation({
     mutationFn: async (schedule: any) => {
-      const response = await apiRequest("PUT", `/api/schedules/${schedule.id}`, schedule);
+      const response = await apiRequest("PUT", `/api/monthly-schedules/${schedule.id}`, schedule);
       return response.json();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/schedules"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/monthly-schedules"] });
       toast({
         title: "Sucesso!",
         description: "Escala salva com sucesso.",
@@ -74,14 +53,6 @@ export default function SchedulePage() {
     },
   });
 
-  const handleGenerateNewWeek = () => {
-    const nextWeek = new Date(currentWeekStart);
-    nextWeek.setDate(nextWeek.getDate() + 7);
-    const nextWeekStart = nextWeek.toISOString().split('T')[0];
-    setCurrentWeekStart(nextWeekStart);
-    generateScheduleMutation.mutate(nextWeekStart);
-  };
-
   const handleSaveSchedule = () => {
     if (currentSchedule) {
       saveScheduleMutation.mutate(currentSchedule);
@@ -94,7 +65,7 @@ export default function SchedulePage() {
   const nextSunday = rotationState?.lastSundayEmployeeId === weekendEmployees[0]?.id ? 
     weekendEmployees[1]?.name : weekendEmployees[0]?.name;
 
-  const upcomingHolidays = holidays.slice(0, 3);
+  const upcomingHolidays = getFutureHolidays(holidays).slice(0, 3);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -108,16 +79,8 @@ export default function SchedulePage() {
             </h1>
             <div className="flex items-center space-x-4">
               <span className="text-sm">
-                Semana de {formatDateRange(currentWeekStart)}
+                {formatMonthYear()}
               </span>
-              <Button
-                onClick={handleGenerateNewWeek}
-                className="bg-white text-blue-600 hover:bg-gray-100"
-                disabled={generateScheduleMutation.isPending}
-              >
-                <Plus className="mr-2 h-4 w-4" />
-                Nova Semana
-              </Button>
             </div>
           </div>
         </div>

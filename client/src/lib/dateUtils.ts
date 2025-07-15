@@ -1,9 +1,29 @@
+export function getCurrentMonthStart(): string {
+  const now = new Date();
+  const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
+  return firstDay.toISOString().split('T')[0];
+}
+
+export function getCurrentMonthEnd(): string {
+  const now = new Date();
+  const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+  return lastDay.toISOString().split('T')[0];
+}
+
 export function getCurrentWeekStart(): string {
   const now = new Date();
   const dayOfWeek = now.getDay();
   const diff = now.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1); // Adjust for Sunday
   const monday = new Date(now.setDate(diff));
   return monday.toISOString().split('T')[0];
+}
+
+export function formatMonthYear(): string {
+  const now = new Date();
+  return now.toLocaleDateString('pt-BR', { 
+    month: 'long', 
+    year: 'numeric' 
+  });
 }
 
 export function formatDateRange(weekStart: string): string {
@@ -47,4 +67,22 @@ export function getHolidayName(date: string, holidays: any[]): string | null {
   const monthDay = `${String(dateObj.getMonth() + 1).padStart(2, '0')}-${String(dateObj.getDate()).padStart(2, '0')}`;
   const holiday = holidays.find(h => h.date === monthDay);
   return holiday ? holiday.name : null;
+}
+
+export function getFutureHolidays(holidays: any[]): any[] {
+  const today = new Date();
+  const currentYear = today.getFullYear();
+  
+  return holidays
+    .map(holiday => {
+      const [month, day] = holiday.date.split('-').map(Number);
+      const holidayDate = new Date(currentYear, month - 1, day);
+      return {
+        ...holiday,
+        fullDate: holidayDate,
+        formattedDate: holidayDate.toLocaleDateString('pt-BR')
+      };
+    })
+    .filter(holiday => holiday.fullDate >= today)
+    .sort((a, b) => a.fullDate.getTime() - b.fullDate.getTime());
 }

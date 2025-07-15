@@ -58,6 +58,19 @@ export const insertWeeklyScheduleSchema = weeklyScheduleSchema.omit({ id: true }
 export type WeeklySchedule = z.infer<typeof weeklyScheduleSchema>;
 export type InsertWeeklySchedule = z.infer<typeof insertWeeklyScheduleSchema>;
 
+// Monthly schedule schema
+export const monthlyScheduleSchema = z.object({
+  id: z.number(),
+  monthStart: z.string(), // YYYY-MM-DD format
+  monthEnd: z.string(), // YYYY-MM-DD format
+  entries: z.array(scheduleEntrySchema),
+  createdAt: z.date().default(() => new Date())
+});
+
+export const insertMonthlyScheduleSchema = monthlyScheduleSchema.omit({ id: true });
+export type MonthlySchedule = z.infer<typeof monthlyScheduleSchema>;
+export type InsertMonthlySchedule = z.infer<typeof insertMonthlyScheduleSchema>;
+
 // Weekend rotation state schema
 export const weekendRotationStateSchema = z.object({
   id: z.number(),

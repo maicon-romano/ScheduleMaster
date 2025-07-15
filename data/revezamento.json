@@ -1,6 +1,6 @@
 {
   "id": 1,
-  "lastSaturdayEmployeeId": null,
-  "lastSundayEmployeeId": null,
-  "weekCount": 0
+  "lastSaturdayEmployeeId": 6,
+  "lastSundayEmployeeId": 6,
+  "weekCount": 1
 }

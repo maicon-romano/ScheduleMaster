@@ -7,6 +7,8 @@ import {
   InsertScheduleEntry,
   WeeklySchedule,
   InsertWeeklySchedule,
+  MonthlySchedule,
+  InsertMonthlySchedule,
   WeekendRotationState,
   InsertWeekendRotationState
 } from "@shared/schema";
@@ -17,6 +19,7 @@ const DATA_DIR = path.join(process.cwd(), 'data');
 const EMPLOYEES_FILE = path.join(DATA_DIR, 'funcionarios.json');
 const HOLIDAYS_FILE = path.join(DATA_DIR, 'feriados.json');
 const SCHEDULES_FILE = path.join(DATA_DIR, 'escalas.json');
+const MONTHLY_SCHEDULES_FILE = path.join(DATA_DIR, 'escalas-mensais.json');
 const ROTATION_FILE = path.join(DATA_DIR, 'revezamento.json');
 
 export interface IStorage {
@@ -42,6 +45,14 @@ export interface IStorage {
   updateSchedule(id: number, schedule: Partial<WeeklySchedule>): Promise<WeeklySchedule | undefined>;
   deleteSchedule(id: number): Promise<boolean>;
 
+  // Monthly schedule operations
+  getMonthlySchedules(): Promise<MonthlySchedule[]>;
+  getMonthlySchedule(id: number): Promise<MonthlySchedule | undefined>;
+  getScheduleByMonth(monthStart: string): Promise<MonthlySchedule | undefined>;
+  createMonthlySchedule(schedule: InsertMonthlySchedule): Promise<MonthlySchedule>;
+  updateMonthlySchedule(id: number, schedule: Partial<MonthlySchedule>): Promise<MonthlySchedule | undefined>;
+  deleteMonthlySchedule(id: number): Promise<boolean>;
+
   // Weekend rotation state
   getWeekendRotationState(): Promise<WeekendRotationState>;
   updateWeekendRotationState(state: Partial<WeekendRotationState>): Promise<WeekendRotationState>;
@@ -51,6 +62,7 @@ export class FileStorage implements IStorage {
   private employees: Map<number, Employee> = new Map();
   private holidays: Map<number, Holiday> = new Map();
   private schedules: Map<number, WeeklySchedule> = new Map();
+  private monthlySchedules: Map<number, MonthlySchedule> = new Map();
   private rotationState: WeekendRotationState = {
     id: 1,
     lastSaturdayEmployeeId: null,
@@ -61,6 +73,7 @@ export class FileStorage implements IStorage {
   private nextEmployeeId = 1;
   private nextHolidayId = 1;
   private nextScheduleId = 1;
+  private nextMonthlyScheduleId = 1;
 
   constructor() {
     this.initializeData();
@@ -72,6 +85,7 @@ export class FileStorage implements IStorage {
       await this.loadEmployees();
       await this.loadHolidays();
       await this.loadSchedules();
+      await this.loadMonthlySchedules();
       await this.loadRotationState();
     } catch (error) {
       console.error('Error initializing data:', error);
@@ -198,6 +212,23 @@ export class FileStorage implements IStorage {
     }
   }
 
+  private async loadMonthlySchedules() {
+    try {
+      const data = await fs.readFile(MONTHLY_SCHEDULES_FILE, 'utf-8');
+      const schedules: MonthlySchedule[] = JSON.parse(data);
+      this.monthlySchedules.clear();
+      schedules.forEach(schedule => {
+        this.monthlySchedules.set(schedule.id, {
+          ...schedule,
+          createdAt: new Date(schedule.createdAt)
+        });
+        this.nextMonthlyScheduleId = Math.max(this.nextMonthlyScheduleId, schedule.id + 1);
+      });
+    } catch (error) {
+      // File doesn't exist, start with empty monthly schedules
+    }
+  }
+
   private async loadRotationState() {
     try {
       const data = await fs.readFile(ROTATION_FILE, 'utf-8');
@@ -221,6 +252,11 @@ export class FileStorage implements IStorage {
   private async saveSchedules() {
     const schedules = Array.from(this.schedules.values());
     await fs.writeFile(SCHEDULES_FILE, JSON.stringify(schedules, null, 2));
+  }
+
+  private async saveMonthlySchedules() {
+    const schedules = Array.from(this.monthlySchedules.values());
+    await fs.writeFile(MONTHLY_SCHEDULES_FILE, JSON.stringify(schedules, null, 2));
   }
 
   private async saveRotationState() {
@@ -353,6 +389,47 @@ export class FileStorage implements IStorage {
     this.rotationState = { ...this.rotationState, ...updates };
     await this.saveRotationState();
     return this.rotationState;
+  }
+
+  // Monthly schedule operations
+  async getMonthlySchedules(): Promise<MonthlySchedule[]> {
+    return Array.from(this.monthlySchedules.values());
+  }
+
+  async getMonthlySchedule(id: number): Promise<MonthlySchedule | undefined> {
+    return this.monthlySchedules.get(id);
+  }
+
+  async getScheduleByMonth(monthStart: string): Promise<MonthlySchedule | undefined> {
+    return Array.from(this.monthlySchedules.values()).find(s => s.monthStart === monthStart);
+  }
+
+  async createMonthlySchedule(insertSchedule: InsertMonthlySchedule): Promise<MonthlySchedule> {
+    const schedule: MonthlySchedule = {
+      ...insertSchedule,
+      id: this.nextMonthlyScheduleId++
+    };
+    this.monthlySchedules.set(schedule.id, schedule);
+    await this.saveMonthlySchedules();
+    return schedule;
+  }
+
+  async updateMonthlySchedule(id: number, updates: Partial<MonthlySchedule>): Promise<MonthlySchedule | undefined> {
+    const schedule = this.monthlySchedules.get(id);
+    if (!schedule) return undefined;
+
+    const updated = { ...schedule, ...updates };
+    this.monthlySchedules.set(id, updated);
+    await this.saveMonthlySchedules();
+    return updated;
+  }
+
+  async deleteMonthlySchedule(id: number): Promise<boolean> {
+    const deleted = this.monthlySchedules.delete(id);
+    if (deleted) {
+      await this.saveMonthlySchedules();
+    }
+    return deleted;
   }
 }
 

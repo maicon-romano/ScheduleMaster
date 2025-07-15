@@ -29,7 +29,7 @@ export default function ScheduleTable({
   if (!schedule || !schedule.entries) {
     return (
       <div className="p-6 text-center text-gray-500">
-        Nenhuma escala encontrada para esta semana
+        Nenhuma escala encontrada para este mês
       </div>
     );
   }

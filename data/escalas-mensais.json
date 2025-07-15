@@ -1,0 +1,351 @@
+[
+  {
+    "monthStart": "2025-07-01",
+    "monthEnd": "2025-07-31",
+    "entries": [
+      {
+        "id": 1752605254154,
+        "date": "2025-07-01",
+        "dayOfWeek": "tuesday",
+        "morningEmployeeId": 1,
+        "afternoonEmployeeId": 2,
+        "oncallEmployeeId": null,
+        "isHoliday": false,
+        "holidayName": null,
+        "status": "normal"
+      },
+      {
+        "id": 1752605254155,
+        "date": "2025-07-02",
+        "dayOfWeek": "wednesday",
+        "morningEmployeeId": 1,
+        "afternoonEmployeeId": 2,
+        "oncallEmployeeId": null,
+        "isHoliday": false,
+        "holidayName": null,
+        "status": "normal"
+      },
+      {
+        "id": 1752605254156,
+        "date": "2025-07-03",
+        "dayOfWeek": "thursday",
+        "morningEmployeeId": 1,
+        "afternoonEmployeeId": 2,
+        "oncallEmployeeId": null,
+        "isHoliday": false,
+        "holidayName": null,
+        "status": "normal"
+      },
+      {
+        "id": 1752605254157,
+        "date": "2025-07-04",
+        "dayOfWeek": "friday",
+        "morningEmployeeId": 1,
+        "afternoonEmployeeId": 2,
+        "oncallEmployeeId": null,
+        "isHoliday": false,
+        "holidayName": null,
+        "status": "normal"
+      },
+      {
+        "id": 1752605254158,
+        "date": "2025-07-05",
+        "dayOfWeek": "saturday",
+        "morningEmployeeId": null,
+        "afternoonEmployeeId": null,
+        "oncallEmployeeId": 5,
+        "isHoliday": false,
+        "holidayName": null,
+        "status": "oncall"
+      },
+      {
+        "id": 1752605254159,
+        "date": "2025-07-06",
+        "dayOfWeek": "sunday",
+        "morningEmployeeId": null,
+        "afternoonEmployeeId": null,
+        "oncallEmployeeId": 5,
+        "isHoliday": false,
+        "holidayName": null,
+        "status": "oncall"
+      },
+      {
+        "id": 1752605254160,
+        "date": "2025-07-07",
+        "dayOfWeek": "monday",
+        "morningEmployeeId": 1,
+        "afternoonEmployeeId": 2,
+        "oncallEmployeeId": null,
+        "isHoliday": false,
+        "holidayName": null,
+        "status": "normal"
+      },
+      {
+        "id": 1752605254161,
+        "date": "2025-07-08",
+        "dayOfWeek": "tuesday",
+        "morningEmployeeId": 1,
+        "afternoonEmployeeId": 2,
+        "oncallEmployeeId": null,
+        "isHoliday": false,
+        "holidayName": null,
+        "status": "normal"
+      },
+      {
+        "id": 1752605254162,
+        "date": "2025-07-09",
+        "dayOfWeek": "wednesday",
+        "morningEmployeeId": 1,
+        "afternoonEmployeeId": 2,
+        "oncallEmployeeId": null,
+        "isHoliday": true,
+        "holidayName": "Independência do Brasil",
+        "status": "holiday"
+      },
+      {
+        "id": 1752605254163,
+        "date": "2025-07-10",
+        "dayOfWeek": "thursday",
+        "morningEmployeeId": 1,
+        "afternoonEmployeeId": 2,
+        "oncallEmployeeId": null,
+        "isHoliday": false,
+        "holidayName": null,
+        "status": "normal"
+      },
+      {
+        "id": 1752605254164,
+        "date": "2025-07-11",
+        "dayOfWeek": "friday",
+        "morningEmployeeId": 1,
+        "afternoonEmployeeId": 2,
+        "oncallEmployeeId": null,
+        "isHoliday": false,
+        "holidayName": null,
+        "status": "normal"
+      },
+      {
+        "id": 1752605254165,
+        "date": "2025-07-12",
+        "dayOfWeek": "saturday",
+        "morningEmployeeId": null,
+        "afternoonEmployeeId": null,
+        "oncallEmployeeId": 6,
+        "isHoliday": false,
+        "holidayName": null,
+        "status": "oncall"
+      },
+      {
+        "id": 1752605254166,
+        "date": "2025-07-13",
+        "dayOfWeek": "sunday",
+        "morningEmployeeId": null,
+        "afternoonEmployeeId": null,
+        "oncallEmployeeId": 6,
+        "isHoliday": false,
+        "holidayName": null,
+        "status": "oncall"
+      },
+      {
+        "id": 1752605254167,
+        "date": "2025-07-14",
+        "dayOfWeek": "monday",
+        "morningEmployeeId": 1,
+        "afternoonEmployeeId": 2,
+        "oncallEmployeeId": null,
+        "isHoliday": false,
+        "holidayName": null,
+        "status": "normal"
+      },
+      {
+        "id": 1752605254168,
+        "date": "2025-07-15",
+        "dayOfWeek": "tuesday",
+        "morningEmployeeId": 1,
+        "afternoonEmployeeId": 2,
+        "oncallEmployeeId": null,
+        "isHoliday": false,
+        "holidayName": null,
+        "status": "normal"
+      },
+      {
+        "id": 1752605254169,
+        "date": "2025-07-16",
+        "dayOfWeek": "wednesday",
+        "morningEmployeeId": 1,
+        "afternoonEmployeeId": 2,
+        "oncallEmployeeId": null,
+        "isHoliday": false,
+        "holidayName": null,
+        "status": "normal"
+      },
+      {
+        "id": 1752605254170,
+        "date": "2025-07-17",
+        "dayOfWeek": "thursday",
+        "morningEmployeeId": 1,
+        "afternoonEmployeeId": 2,
+        "oncallEmployeeId": null,
+        "isHoliday": false,
+        "holidayName": null,
+        "status": "normal"
+      },
+      {
+        "id": 1752605254171,
+        "date": "2025-07-18",
+        "dayOfWeek": "friday",
+        "morningEmployeeId": 1,
+        "afternoonEmployeeId": 2,
+        "oncallEmployeeId": null,
+        "isHoliday": false,
+        "holidayName": null,
+        "status": "normal"
+      },
+      {
+        "id": 1752605254172,
+        "date": "2025-07-19",
+        "dayOfWeek": "saturday",
+        "morningEmployeeId": null,
+        "afternoonEmployeeId": null,
+        "oncallEmployeeId": 5,
+        "isHoliday": false,
+        "holidayName": null,
+        "status": "oncall"
+      },
+      {
+        "id": 1752605254173,
+        "date": "2025-07-20",
+        "dayOfWeek": "sunday",
+        "morningEmployeeId": null,
+        "afternoonEmployeeId": null,
+        "oncallEmployeeId": 5,
+        "isHoliday": false,
+        "holidayName": null,
+        "status": "oncall"
+      },
+      {
+        "id": 1752605254174,
+        "date": "2025-07-21",
+        "dayOfWeek": "monday",
+        "morningEmployeeId": 1,
+        "afternoonEmployeeId": 2,
+        "oncallEmployeeId": null,
+        "isHoliday": false,
+        "holidayName": null,
+        "status": "normal"
+      },
+      {
+        "id": 1752605254175,
+        "date": "2025-07-22",
+        "dayOfWeek": "tuesday",
+        "morningEmployeeId": 1,
+        "afternoonEmployeeId": 2,
+        "oncallEmployeeId": null,
+        "isHoliday": false,
+        "holidayName": null,
+        "status": "normal"
+      },
+      {
+        "id": 1752605254176,
+        "date": "2025-07-23",
+        "dayOfWeek": "wednesday",
+        "morningEmployeeId": 1,
+        "afternoonEmployeeId": 2,
+        "oncallEmployeeId": null,
+        "isHoliday": false,
+        "holidayName": null,
+        "status": "normal"
+      },
+      {
+        "id": 1752605254177,
+        "date": "2025-07-24",
+        "dayOfWeek": "thursday",
+        "morningEmployeeId": 1,
+        "afternoonEmployeeId": 2,
+        "oncallEmployeeId": null,
+        "isHoliday": false,
+        "holidayName": null,
+        "status": "normal"
+      },
+      {
+        "id": 1752605254178,
+        "date": "2025-07-25",
+        "dayOfWeek": "friday",
+        "morningEmployeeId": 1,
+        "afternoonEmployeeId": 2,
+        "oncallEmployeeId": null,
+        "isHoliday": false,
+        "holidayName": null,
+        "status": "normal"
+      },
+      {
+        "id": 1752605254179,
+        "date": "2025-07-26",
+        "dayOfWeek": "saturday",
+        "morningEmployeeId": null,
+        "afternoonEmployeeId": null,
+        "oncallEmployeeId": 6,
+        "isHoliday": false,
+        "holidayName": null,
+        "status": "oncall"
+      },
+      {
+        "id": 1752605254180,
+        "date": "2025-07-27",
+        "dayOfWeek": "sunday",
+        "morningEmployeeId": null,
+        "afternoonEmployeeId": null,
+        "oncallEmployeeId": 6,
+        "isHoliday": false,
+        "holidayName": null,
+        "status": "oncall"
+      },
+      {
+        "id": 1752605254181,
+        "date": "2025-07-28",
+        "dayOfWeek": "monday",
+        "morningEmployeeId": 1,
+        "afternoonEmployeeId": 2,
+        "oncallEmployeeId": null,
+        "isHoliday": false,
+        "holidayName": null,
+        "status": "normal"
+      },
+      {
+        "id": 1752605254182,
+        "date": "2025-07-29",
+        "dayOfWeek": "tuesday",
+        "morningEmployeeId": 1,
+        "afternoonEmployeeId": 2,
+        "oncallEmployeeId": null,
+        "isHoliday": false,
+        "holidayName": null,
+        "status": "normal"
+      },
+      {
+        "id": 1752605254183,
+        "date": "2025-07-30",
+        "dayOfWeek": "wednesday",
+        "morningEmployeeId": 1,
+        "afternoonEmployeeId": 2,
+        "oncallEmployeeId": null,
+        "isHoliday": false,
+        "holidayName": null,
+        "status": "normal"
+      },
+      {
+        "id": 1752605254184,
+        "date": "2025-07-31",
+        "dayOfWeek": "thursday",
+        "morningEmployeeId": 1,
+        "afternoonEmployeeId": 2,
+        "oncallEmployeeId": null,
+        "isHoliday": false,
+        "holidayName": null,
+        "status": "normal"
+      }
+    ],
+    "createdAt": "2025-07-15T18:47:34.157Z",
+    "id": 1
+  }
+]

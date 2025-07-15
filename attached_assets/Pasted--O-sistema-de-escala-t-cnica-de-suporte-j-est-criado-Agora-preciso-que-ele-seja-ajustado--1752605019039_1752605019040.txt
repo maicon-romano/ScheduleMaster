@@ -1,0 +1,51 @@
+> O sistema de escala técnica de suporte **já está criado**. Agora, preciso que ele seja **ajustado** com base nos seguintes pontos atualizados:
+>
+> ---
+>
+> ## 🛠️ Ajustes necessários no sistema existente:
+>
+> 1. **Exibir a escala do mês inteiro atual**
+>
+>    * O sistema atualmente mostra apenas uma **escala semanal**
+>    * Corrigir para que a visualização mostre a **escala de todos os dias do mês atual**, baseada na **data do sistema (hoje)**
+>    * A escala mensal deve ser **única e contínua** (não recriar por semana)
+> 2. **Remover a lógica de "gerar nova escala"**
+>
+>    * A escala deve ser **carregada automaticamente** com base na data atual
+>    * Não deve existir botão ou função para “gerar nova semana” ou “nova escala”
+>    * As alterações devem ser feitas diretamente na tabela (como edição de funcionários ou horários)
+> 3. **Ajustar o card de "Próximos Feriados"**
+>
+>    * Atualmente mostra todos os feriados do mês, mesmo os que já passaram
+>    * Corrigir para mostrar **apenas os feriados futuros a partir da data atual**
+>    * Os feriados estão armazenados no formato `"MM-DD"` (sem ano)
+>    * O sistema deve converter essas datas para o **ano atual em tempo de execução**
+>
+> ---
+>
+> ## ✅ O que deve continuar funcionando:
+>
+> * Armazenamento em arquivos JSON:
+>
+>   * `funcionarios.json`
+>   * `feriados.json`
+>   * `escala.json`
+> * Lógica de revezamento de fim de semana entre dois funcionários
+> * Interface simples e funcional
+> * Capacidade de editar a escala diretamente
+>
+> ---
+>
+> ## Exemplos de comportamento esperado:
+>
+> * Ao acessar o sistema no dia 15/07/2025:
+>
+>   * O sistema exibe todos os dias de **julho de 2025**
+>   * Escala aparece já preenchida com os turnos cadastrados
+>   * Feriado de 24/06 (São João) não aparece em “Próximos Feriados” porque já passou
+>   * Feriado de 16/07 (Nossa Senhora do Carmo) aparece, pois ainda está por vir
+>
+> ---
+>
+> O objetivo é manter o sistema leve e funcional, sem dependência de bancos de dados externos, e com boa experiência de uso para quem gerencia a escala.
+

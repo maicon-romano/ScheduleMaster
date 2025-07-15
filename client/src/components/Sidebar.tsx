@@ -29,8 +29,8 @@ export default function Sidebar({
         <nav className="space-y-2">
           {navigationItems.map(({ path, icon: Icon, label }) => (
             <Link key={path} href={path}>
-              <a 
-                className={`flex items-center p-3 rounded-lg font-medium transition-colors ${
+              <div 
+                className={`flex items-center p-3 rounded-lg font-medium transition-colors cursor-pointer ${
                   location === path 
                     ? 'text-blue-600 bg-blue-50' 
                     : 'text-gray-600 hover:bg-gray-50'
@@ -38,7 +38,7 @@ export default function Sidebar({
               >
                 <Icon className="mr-3 h-4 w-4" />
                 {label}
-              </a>
+              </div>
             </Link>
           ))}
           <button className="flex items-center p-3 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors w-full text-left">
